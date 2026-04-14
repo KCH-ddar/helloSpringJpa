@@ -38,6 +38,7 @@
 
     <h1>상품 목록</h1>
 
+    <!-- 상품명 및 카테고리 검색 -->
     <form th:action="@{/products}" method="get" class="form-group">
         <input type="text" name="keyword" th:value="${keyword}" placeholder="상품명 검색"/>
         <select name="categoryId">
@@ -48,7 +49,7 @@
         </select>
         <button type="submit">검색</button>
 
-        <div class="empty-msg" th:if="${#lists.isEmpty(products) and (!#strings.isEmpty(keyword)) and categoryId != null}">
+        <div class="empty-msg" th:if="${#lists.isEmpty(products) and (!#strings.isEmpty(keyword) or categoryId != null)}">
             검색 결과가 없습니다.
         </div>
     </form>
@@ -63,6 +64,7 @@
         등록된 상품이 없습니다. 새 상품을 등록해 주세요.
     </div>
 
+    <!-- 상품 목록 -->
     <table th:unless="${#lists.isEmpty(products)}">
         <thead>
             <tr>
@@ -102,6 +104,10 @@
             </tr>
         </tbody>
     </table>
+
+    <footer>
+        <p th:text="${'실습 수행: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss') + '  |  학번: 2371114  |  성명: 김채현'}"></p>
+    </footer>
 
 </body>
 </html>

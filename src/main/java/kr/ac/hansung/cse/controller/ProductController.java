@@ -32,9 +32,33 @@ public class ProductController {
 
     // 상품 목록 화면 조회
     @GetMapping
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String listProducts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
+            Model model) {
+
+        // 빈 검색창&전체 카테고리인 채로 검색 시 기본 주소로 리다이렉트
+        if(keyword != null && keyword.isBlank() && categoryId == null) {
+            return "redirect:/products";
+        }
+
+        List<Product> products = null;
+
+        // 검색 조건에 따라 데이터 조회(검색어 우선)
+        if(keyword != null && !keyword.isBlank()) {
+            products = productService.searchByName(keyword);
+        } else if(categoryId != null){
+            products = productService.searchByCategory(categoryId);
+        } else{
+            products = productService.getAllProducts();
+        }
+
+        // 뷰로 데이터 전달
         model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryId", categoryId);
+
         return "productList";
     }
 
