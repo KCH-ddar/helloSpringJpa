@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리 목록</title>
+</head>
+<body>
+    <p th:if="${successMessage}" th:text="${successMessage}"></p>
+    <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>카테고리명</th>
+                <th>작업</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cat : ${categories}">
+                <td th:text="${cat.id}"></td>
+                <td th:text="${cat.name}"></td>
+                <td>
+                    <form th:action="@{/categories/{id}/delete(id=${cat.id})}" method="post">
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>
+        <p th:text="${'실습 수행: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss') + '  |  학번: 2371114  |  성명: 김채현'}"></p>
+    </footer>
+</body>
+</html>
