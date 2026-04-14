@@ -37,12 +37,6 @@
 
     <h1>상품 목록</h1>
 
-    <!--
-        th:if="${successMessage}":
-        Model에 successMessage 속성이 있을 때만 이 div를 렌더링합니다.
-        RedirectAttributes.addFlashAttribute()로 전달된 값이 여기 표시됩니다.
-        Flash 속성은 리다이렉트 후 딱 한 번 표시되고 자동으로 삭제됩니다.
-    -->
     <div class="alert-success" th:if="${successMessage}">
         <span th:text="${successMessage}">성공 메시지</span>
     </div>
@@ -64,51 +58,24 @@
             </tr>
         </thead>
         <tbody>
-            <!--
-                th:each="product, iterStat : ${products}":
-                Java의 for-each 루프에 해당합니다.
-                Controller에서 model.addAttribute("products", products)로
-                전달한 List<Product>를 하나씩 순회합니다.
-            -->
             <tr th:each="product : ${products}">
                 <td th:text="${product.id}">1</td>
                 <td>
-                    <!--
-                        상품명을 클릭하면 상세 페이지로 이동합니다.
-                    -->
                     <a class="detail-link"
                        th:href="@{/products/{id}(id=${product.id})}"
                        th:text="${product.name}">상품명</a>
                 </td>
                 <td th:text="${product.category != null ? product.category.name : '-'}">카테고리</td>
 
-                <!--
-                    #numbers.formatDecimal(): Thymeleaf 내장 유틸리티 객체
-                    숫자를 형식화합니다: 소수점 0자리, 천단위 구분자 적용
-                    결과 예: 15000.00 → "15,000"
-                -->
                 <td class="price"
                     th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 0, 'POINT')} + '원'">
                     15,000원
                 </td>
 
                 <td>
-                    <!--
-                        수정 링크: GET /products/{id}/edit
-                    -->
                     <a class="edit-link"
                        th:href="@{/products/{id}/edit(id=${product.id})}">수정</a>
 
-                    <!--
-                        삭제 폼:
-                        HTML <form>은 GET/POST만 지원합니다.
-                        HTTP DELETE를 사용하려면 REST API + JS fetch가 필요합니다.
-                        여기서는 학습 목적으로 POST 방식을 사용합니다.
-
-                        onsubmit: 브라우저의 confirm() 대화상자로 삭제 확인을 요청합니다.
-                          - 확인 클릭 → true 반환 → 폼 제출
-                          - 취소 클릭 → false 반환 → 폼 제출 취소
-                    -->
                     <form th:action="@{/products/{id}/delete(id=${product.id})}"
                           method="post"
                           style="display: inline;"

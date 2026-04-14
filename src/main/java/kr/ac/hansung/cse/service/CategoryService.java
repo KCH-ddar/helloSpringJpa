@@ -2,12 +2,14 @@ package kr.ac.hansung.cse.service;
 
 import kr.ac.hansung.cse.exception.DuplicateCategoryException;
 import kr.ac.hansung.cse.model.Category;
+import kr.ac.hansung.cse.model.Product;
 import kr.ac.hansung.cse.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,5 +39,10 @@ public class CategoryService {
         if (count > 0) throw new IllegalStateException(  // 참조하는 상품이 있는 경우
                 "상품 " + count + "개가 연결되어 있어 삭제할 수 없습니다.");
         categoryRepository.delete(id);
+    }
+
+    // ID로 카테고리를 찾음
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 }
