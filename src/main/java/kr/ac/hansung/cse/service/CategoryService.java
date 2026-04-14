@@ -15,13 +15,14 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
+    // 모든 카테고리 목록 조회
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
-    @Transactional // readOnly 오버라이드 → 쓰기 허용
+    @Transactional
     public Category createCategory(String name) {
-        // 중복 검사: 이름이 이미 있으면 예외 발생
+        // 등록 전 중복 이름이 있는 지 확인
         categoryRepository.findByName(name)
                 .ifPresent(c -> {
                     throw new DuplicateCategoryException(name);
@@ -31,8 +32,9 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
+        // 카테고리 삭제 전 이 카테고리를 참조하고 있는 상품이 있는 지 확인
         long count = categoryRepository.countProductsByCategoryId(id);
-        if (count > 0) throw new IllegalStateException(
+        if (count > 0) throw new IllegalStateException(  // 참조하는 상품이 있는 경우
                 "상품 " + count + "개가 연결되어 있어 삭제할 수 없습니다.");
         categoryRepository.delete(id);
     }

@@ -3,16 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>카테고리 목록</title>
+
+    <style>
+        body { font-family: 'Malgun Gothic', Arial, sans-serif; max-width: 1100px; margin: 40px auto; padding: 0 20px; color: #333; }
+        h1 { border-bottom: 2px solid #4a90d9; padding-bottom: 10px; color: #2c3e50; }
+        .btn { display: inline-block; padding: 8px 16px; background: #4a90d9; color: white; text-decoration: none; border-radius: 4px; margin-bottom: 16px; }
+        .btn:hover { background: #357abd; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #4a90d9; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: middle; }
+        tr:hover { background: #f5f8ff; }
+        .btn-delete { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.95em; padding: 0; text-decoration: underline; }
+        .btn-delete:hover { color: #c0392b; }
+        .alert-success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; }
+        .empty-msg { text-align: center; padding: 40px; color: #999; font-size: 1.1em; }
+        .alert-error { background: #ffe4e1; border: 1px solid #fa8071; color: #e74c3c; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; }
+    </style>
 </head>
 <body>
-    <p th:if="${successMessage}" th:text="${successMessage}"></p>
-    <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+    <h1>카테고리 목록</h1>
 
-    <table>
+    <p class="alert-success" th:if="${successMessage}" th:text="${successMessage}"></p>
+    <p class="alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <a class="btn" th:href="@{/categories/create}">+ 새 카테고리 등록</a>
+
+    <div class="empty-msg" th:if="${#lists.isEmpty(categories)}">
+        등록된 카테고리가 없습니다. 새 카테고리를 등록해 주세요.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(categories)}">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>카테고리명</th>
+                <th>카테고리 이름</th>
                 <th>작업</th>
             </tr>
         </thead>
@@ -21,8 +45,11 @@
                 <td th:text="${cat.id}"></td>
                 <td th:text="${cat.name}"></td>
                 <td>
-                    <form th:action="@{/categories/{id}/delete(id=${cat.id})}" method="post">
-                        <button type="submit">삭제</button>
+                    <form th:action="@{/categories/{id}/delete(id=${cat.id})}"
+                          method="post"
+                          style="display: inline;"
+                          onsubmit="return confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.');">
+                        <button type="submit" class="btn-delete">삭제</button>
                     </form>
                 </td>
             </tr>
