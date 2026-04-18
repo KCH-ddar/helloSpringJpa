@@ -72,19 +72,26 @@ helloSpringMVC/
         │   │   ├── WebConfig.java          # MVC 설정 (ViewResolver, 정적 리소스)
         │   │   └── DbConfig.java           # JPA/DB 설정 (DataSource, EntityManagerFactory)
         │   ├── model/
-        │   │   └── Product.java            # JPA 엔티티 (@Entity, @Table)
+        │   │   ├── Product.java            # JPA 엔티티 (@Entity, @Table)
+        │   │   ├── Category.java           # (추가) 
+        │   │   └── CategoryForm.java       # (추가) 폼 바인딩
         │   ├── repository/
-        │   │   └── ProductRepository.java  # 데이터 접근 (@PersistenceContext EntityManager)
+        │   │   ├── ProductRepository.java  # 데이터 접근 (@PersistenceContext EntityManager)
+        │   │   └── CategoryRepository.java
         │   ├── service/
-        │   │   └── ProductService.java     # 비즈니스 로직 (@Transactional)
+        │   │   ├── ProductService.java     # 비즈니스 로직 (@Transactional)
+        │   │   └── CategoryService.java    # (추가)
         │   └── controller/
-        │       └── ProductController.java  # 웹 요청 처리 (@Controller)
+        │       ├── ProductController.java  # 웹 요청 처리 (@Controller)
+        │   │   └── CategoryController.java # (추가)
         └── webapp/
             └── WEB-INF/
                 └── views/
                     ├── productList.html    # 상품 목록 (Thymeleaf)
                     ├── productDetail.html  # 상품 상세
-                    └── productForm.html    # 상품 등록 폼
+                    ├── productForm.html    # 상품 등록 폼
+                    ├── categoryForm.html   # (추가) 카테고리 등록 폼
+                    └── categoryList.html   # (추가) 카테고리 목록
 ```
 
 ---
@@ -189,12 +196,16 @@ Spring IoC 컨테이너
 
 ## 주요 URL
 
-| HTTP Method | URL | 설명 | Controller 메서드 |
-|-------------|-----|------|-------------------|
-| GET | `/products` | 상품 목록 | `listProducts()` |
-| GET | `/products/{id}` | 상품 상세 | `productDetail()` |
-| GET | `/products/create` | 등록 폼 표시 | `showCreateForm()` |
-| POST | `/products/create` | 상품 등록 처리 | `createProduct()` |
+| HTTP Method | URL                       | 설명           | Controller 메서드     |
+|-------------|---------------------------|--------------|--------------------|
+| GET | `/products`               | 상품 목록        | `listProducts()`   |
+| GET | `/products/{id}`          | 상품 상세        | `productDetail()`  |
+| GET | `/products/create`        | 등록 폼 표시      | `showCreateForm()` |
+| POST | `/products/create`        | 상품 등록 처리     | `createProduct()`  |
+| GET | `/categories`             | 카테고리 목록      | `listCategories()`  |
+| GET | `/categories/create`      | 카테고리 등록 폼 표시 | `showCreateForm()` |
+| POST | `/categories/create`      | 카테고리 등록 처리   | `createCategory()`  |
+| POST | `/categories/{id}/delete` | 카테고리 삭제      | `deleteCategory()` |
 
 ---
 
